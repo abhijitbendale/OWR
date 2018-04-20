@@ -11,9 +11,9 @@ The code builds on top of parts of code written by Prof. Thomas Mensink from Uni
 The code is available for non-commercial use. If you use the code, please cite following 2 papers
 
 ```
-"Towards Open World Recongnition" Abhijit Bendale, Terrance Boult CVPR 2015
-"Distance based Image Classification: Generalizing to new classes at near zero cost" Thomas Mensink, Jakob Verbeek, Florent Perronnin, Gabriela Csurka, IEEE Transactions on Pattern Analysis and Machine Intelligence (PAMI) | 2013
-"Metric Learning for Large Scale Image Classification: Generalizing to New Classes at near-zero cost"
+1. "Towards Open World Recongnition" Abhijit Bendale, Terrance Boult CVPR 2015
+2. "Distance based Image Classification: Generalizing to new classes at near zero cost" Thomas Mensink, Jakob Verbeek, Florent Perronnin, Gabriela Csurka, IEEE TPAMI 2013
+3. "Metric Learning for Large Scale Image Classification: Generalizing to New Classes at near-zero cost"
 Thomas Mensink, Jakob Verbeek, Florent Perronnin, Gabriela Csurka ECCV 2012
 ```
 
