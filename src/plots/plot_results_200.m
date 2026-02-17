@@ -29,7 +29,7 @@
 % [4] W Scheirer, A Rocha, A Sapkota, T Boult "Towards Open Set Recognition"
 % IEEE Trans. on Pattern Analysis and Machine Intelligence 2013
 
-clc; clear all; close all;
+clc; clear; close all;
 
 disp('---------------------------------------------------------------');
 disp('Code written by Abhijit Bendale (abendale@vast.uccs.edu)');
@@ -67,7 +67,7 @@ line(xx,yymet, OSSVM','linewidth', 2, 'marker', 'o', 'color', 'c');
 line(xx,yymet, CSSVM','linewidth', 2, 'marker', '*', 'color','b');
 alpha(0.55)
 
-LEG = legend('NCM','NNO', w'1vSet', 'SVM');
+LEG = legend('NCM','NNO', '1vSet', 'SVM');
 set(LEG,'FontSize',15);
 xl = xlabel('# Unknown Testing Categories', 'Rotation', 13);
 yl = ylabel('# Known Training Categories', 'Rotation', -16);

@@ -27,7 +27,7 @@
 % works of Thomas Mensink [2],[3]
 
 
-close all; clear all; clc;
+close all; clear; clc;
 disp('---------------------------------------------------------------');
 disp('Code written by Abhijit Bendale (abendale@vast.uccs.edu)');
 disp('Producing results/plots related to work:');
@@ -77,4 +77,35 @@ learnedModel.OW_Thresh = OW_Thresh;
 disp('Open World Evaluation: Performing Closed Set and Open Set Testing');
 disp('---------------------------------------------------------------');
 
+% Evaluate on incremental classes and unknown classes
+for incr_idx = 1:size(incrementClassList, 1)
+    currentIncrementalClasses = incrementClassList(incr_idx, :);
+    
+    % Update model with incremental classes (without re-learning metric)
+    fprintf('Adding %d incremental classes...\n', length(currentIncrementalClasses));
+    [newX, newY, newM, ~, ~] = OW_readImageNetTrainData(currentIncrementalClasses, length(currentIncrementalClasses), 'train');
+    
+    % Normalize using original training statistics
+    newX = bsxfun(@minus, newX, learnedModel.train_mean');
+    newX = bsxfun(@rdivide, newX, learnedModel.train_std');
+    
+    % Add new class means to the model
+    learnedModel.M = [learnedModel.M, newM];
+    
+    % Test on different unknown class scenarios
+    for unk_idx = 1:length(unknownClassList)
+        fprintf('Testing with %d unknown classes...\n', length(unknownClassList{unk_idx}));
+        
+        % This is where you would load and test on validation/test data
+        % Performance evaluation would be done here
+        % Note: Requires actual test data to be present
+        
+        disp('Test data evaluation would be performed here when data is available.');
+    end
+end
 
+disp('---------------------------------------------------------------');
+disp('Demo completed successfully!');
+disp('Note: Full evaluation requires ImageNet SIFT features dataset.');
+disp('Download from: http://vast.uccs.edu/~abendale/imagenet/imagenet_sift_features.tar');
+disp('---------------------------------------------------------------');

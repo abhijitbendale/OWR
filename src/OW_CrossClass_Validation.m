@@ -57,6 +57,10 @@ function OW_Thresh = OW_CrossClass_Validation(trainingClassList, ...
 % If you use code for either NCM or Metric Learning please cite
 % works of Thomas Mensink [2],[3]
 
+% Parameters for cross-class validation
+TARGET_RECALL = 0.90;  % Target recall on known classes (90%)
+THRESHOLD_STEP_SIZE = 100;  % Step size for threshold scanning
+
 % Create three splits of known and unknown classes
 % Repeat process 3 times
 splitsize = ceil(size(trainingClassList, 2) * 0.66); % Get 2/3rd clasess as known classes
@@ -96,27 +100,60 @@ knownClass_M =  learnedModel.M(1:end, knownClassList_CCV);
  total_knowns = size(d_known_min, 2);
  total_unknowns = size(d_unknown_min, 2);
  
-% Get min and max distance range
-for openset_distance_th = [min(d_known_min):1000:max(d_known_min)]
+% Get min and max distance range and find optimal threshold
+% We want to find threshold that gives target recall on known classes
+% while maximizing F1 measure between known and unknown
+best_f1 = 0;
+best_thresh = 0;
+
+% Scan through possible thresholds
+for openset_distance_th = min(d_known_min):THRESHOLD_STEP_SIZE:max(d_known_min)
        
-    for i = 1:size(distances_min,2)
-      if d_known_min(i) >= openset_distance_th
-        unknown_predictions(i) = 1;
-      else
-         unknown_predictions(i) = 0;
-      end
-    end
-  
+    % Predict which known samples would be rejected as unknown
+    known_predictions = (d_known_min >= openset_distance_th);
+    known_recall = sum(~known_predictions) / total_knowns;
     
+    % If recall is below target, skip this threshold
+    if known_recall < TARGET_RECALL
+        continue;
+    end
+    
+    % Predict which unknown samples would be correctly rejected
+    unknown_predictions = (d_unknown_min >= openset_distance_th);
+    unknown_correct = sum(unknown_predictions);
+    
+    % Calculate precision, recall and F1 for unknown detection
+    tp = unknown_correct;  % True positives: unknowns correctly identified
+    fp = sum(known_predictions);  % False positives: knowns wrongly rejected
+    fn = total_unknowns - unknown_correct;  % False negatives: unknowns accepted as known
+    
+    if (tp + fp) > 0
+        precision = tp / (tp + fp);
+    else
+        precision = 0;
+    end
+    
+    if (tp + fn) > 0
+        recall = tp / (tp + fn);
+    else
+        recall = 0;
+    end
+    
+    if (precision + recall) > 0
+        f1 = 2 * precision * recall / (precision + recall);
+    else
+        f1 = 0;
+    end
+    
+    % Update best threshold if this is better
+    if f1 > best_f1
+        best_f1 = f1;
+        best_thresh = openset_distance_th;
+    end
 end
 
-% Loop through all the examples and perform N+1 way classification
-% where N =  number of known classes. Examples from all unknown classes
-% are treated to belong to one unknown class
-
-
-
-
+fprintf('Cross-Class Validation: Best Threshold = %.4f, F1 = %.4f\n', best_thresh, best_f1);
+OW_Thresh = best_thresh;
 
                                             
     
