@@ -82,7 +82,7 @@ for incr_idx = 1:size(incrementClassList, 1)
     currentIncrementalClasses = incrementClassList(incr_idx, :);
     
     % Update model with incremental classes (without re-learning metric)
-    disp(sprintf('Adding %d incremental classes...', length(currentIncrementalClasses)));
+    fprintf('Adding %d incremental classes...\n', length(currentIncrementalClasses));
     [newX, newY, newM, ~, ~] = OW_readImageNetTrainData(currentIncrementalClasses, length(currentIncrementalClasses), 'train');
     
     % Normalize using original training statistics
@@ -94,7 +94,7 @@ for incr_idx = 1:size(incrementClassList, 1)
     
     % Test on different unknown class scenarios
     for unk_idx = 1:length(unknownClassList)
-        disp(sprintf('Testing with %d unknown classes...', length(unknownClassList{unk_idx})));
+        fprintf('Testing with %d unknown classes...\n', length(unknownClassList{unk_idx}));
         
         % This is where you would load and test on validation/test data
         % Performance evaluation would be done here

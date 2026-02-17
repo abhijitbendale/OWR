@@ -57,6 +57,10 @@ function OW_Thresh = OW_CrossClass_Validation(trainingClassList, ...
 % If you use code for either NCM or Metric Learning please cite
 % works of Thomas Mensink [2],[3]
 
+% Parameters for cross-class validation
+TARGET_RECALL = 0.90;  % Target recall on known classes (90%)
+THRESHOLD_STEP_SIZE = 100;  % Step size for threshold scanning
+
 % Create three splits of known and unknown classes
 % Repeat process 3 times
 splitsize = ceil(size(trainingClassList, 2) * 0.66); % Get 2/3rd clasess as known classes
@@ -97,21 +101,20 @@ knownClass_M =  learnedModel.M(1:end, knownClassList_CCV);
  total_unknowns = size(d_unknown_min, 2);
  
 % Get min and max distance range and find optimal threshold
-% We want to find threshold that gives 90% recall on known classes
+% We want to find threshold that gives target recall on known classes
 % while maximizing F1 measure between known and unknown
 best_f1 = 0;
 best_thresh = 0;
-target_recall = 0.90;
 
 % Scan through possible thresholds
-for openset_distance_th = min(d_known_min):100:max(d_known_min)
+for openset_distance_th = min(d_known_min):THRESHOLD_STEP_SIZE:max(d_known_min)
        
     % Predict which known samples would be rejected as unknown
     known_predictions = (d_known_min >= openset_distance_th);
     known_recall = sum(~known_predictions) / total_knowns;
     
     % If recall is below target, skip this threshold
-    if known_recall < target_recall
+    if known_recall < TARGET_RECALL
         continue;
     end
     
