@@ -1,4 +1,4 @@
-function [X, Y, M, traindata_mean, traindata_std] = readImageNetTrainData(classlist, totalNclasses, datasetsplit)
+function [X, Y, M, traindata_mean, traindata_std] = OW_readImageNetTrainData(classlist, totalNclasses, datasetsplit)
 
 % Input
 % ----------

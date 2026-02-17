@@ -31,7 +31,7 @@
 
 
 
-clc; clear all; close all;
+clc; clear; close all;
 
 disp('---------------------------------------------------------------');
 disp('Code written by Abhijit Bendale (abendale@vast.uccs.edu)');

@@ -67,7 +67,7 @@ function [W, obj, W0] = NCM_train_sgd(X,Y,Means,W,k,ops)
     
     if isscalar(W),
         NrP     = W;
-        W       = randn(rs,NrP,NrD,'single')*.1;
+        W       = single(randn(rs,NrP,NrD))*.1;
     else
         NrP     = size(W,1);
     end
